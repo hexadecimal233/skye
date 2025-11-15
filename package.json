@@ -10,7 +10,8 @@
     "tauri": "tauri",
     "format": "biome format --write .",
     "lint": "biome lint --write .",
-    "check": "biome check --write ."
+    "check": "biome check --write .",
+    "test": "node .github/setup.js"
   },
   "dependencies": {
     "@nuxt/ui": "^4.1.0",
