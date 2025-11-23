@@ -1,5 +1,5 @@
 {
-  "name": "skye",
+  "name": "cloudie",
   "private": true,
   "version": "0.1.0",
   "type": "module",
@@ -11,12 +11,11 @@
     "format": "biome format --write .",
     "lint": "biome lint --write .",
     "check": "biome check --write .",
-    "make-theme": "tsc ./scripts/make-theme.ts --module nodenext && node ./scripts/make-theme.js"
+    "test": "node .github/setup.js"
   },
   "dependencies": {
-    "@applemusic-like-lyrics/core": "^0.2.0",
-    "@applemusic-like-lyrics/vue": "^0.2.0",
     "@nuxt/ui": "^4.1.0",
+    "@tailwindcss/vite": "^4.1.13",
     "@tanstack/vue-table": "^8.21.3",
     "@tanstack/vue-virtual": "^3.13.12",
     "@tauri-apps/api": "^2",
@@ -31,34 +30,31 @@
     "@vueuse/core": "^13.9.0",
     "buffer": "^6.0.3",
     "dayjs": "^1.11.19",
-    "drizzle-orm": "^0.44.7",
-    "hls.js": "^1.6.14",
-    "lrclib-api": "^2.0.4",
+    "drizzle-orm": "^0.44.6",
+    "hls.js": "^1.6.13",
     "overlayscrollbars": "^2.12.0",
     "overlayscrollbars-vue": "^0.5.9",
     "pinia": "^3.0.4",
     "pinia-plugin-persistedstate": "^4.7.1",
-    "tailwindcss": "^4.1.17",
-    "vue": "^3.5.24",
-    "vue-i18n": "11.1.12",
-    "vue-router": "^4.6.3"
+    "tailwindcss": "^4.1.13",
+    "vue": "^3.5.13",
+    "vue-i18n": "11",
+    "vue-router": "^4.5.1"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.3.7",
+    "@biomejs/biome": "2.3.1",
     "@iconify-json/mingcute": "^1.2.5",
-    "@tailwindcss/vite": "^4.1.17",
-    "@tauri-apps/cli": "^2.9.4",
-    "@types/node": "^24.10.1",
-    "@vitejs/plugin-vue": "^6.0.1",
+    "@tauri-apps/cli": "^2",
+    "@types/node": "^24.8.1",
+    "@vitejs/plugin-vue": "^5.2.1",
     "@vitejs/plugin-vue-jsx": "^5.1.1",
     "better-sqlite3": "^12.4.1",
-    "drizzle-kit": "^0.31.7",
-    "typescript": "~5.9.3",
+    "drizzle-kit": "^0.31.5",
+    "typescript": "~5.6.2",
     "unplugin-icons": "^22.5.0",
     "unplugin-vue-components": "^30.0.0",
-    "unplugin-vue-router": "^0.17.0",
-    "vite": "^7.2.2",
+    "vite": "^6.0.3",
     "vite-plugin-vue-devtools": "^8.0.3",
-    "vue-tsc": "^3.1.4"
+    "vue-tsc": "^2.1.10"
   }
 }
