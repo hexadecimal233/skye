@@ -14,7 +14,6 @@
   },
   "dependencies": {
     "@nuxt/ui": "^4.1.0",
-    "@tailwindcss/vite": "^4.1.17",
     "@tanstack/vue-table": "^8.21.3",
     "@tanstack/vue-virtual": "^3.13.12",
     "@tauri-apps/api": "^2",
@@ -42,8 +41,9 @@
     "vue-router": "^4.6.3"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.3.5",
+    "@biomejs/biome": "2.3.7",
     "@iconify-json/mingcute": "^1.2.5",
+    "@tailwindcss/vite": "^4.1.17",
     "@tauri-apps/cli": "^2.9.4",
     "@types/node": "^24.10.1",
     "@vitejs/plugin-vue": "^6.0.1",

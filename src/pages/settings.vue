@@ -244,6 +244,7 @@ import { FileNaming } from "@/systems/download/parser"
 import { capitalizeFirstLetter } from "@/utils/utils"
 import { M3U8_CACHE_MANAGER } from "@/systems/player/cache"
 
+const toast = useToast()
 const isPathValid = ref(false)
 const versionInfo = ref({
   version: "",
@@ -306,13 +307,13 @@ onMounted(async () => {
 async function clearCache() {
   try {
     await M3U8_CACHE_MANAGER.clearCache()
-    useToast().add({
+    toast.add({
       color: "success",
       title: i18n.global.t("skye.toasts.clearCacheSuccess"),
     })
   } catch (error) {
     console.error("Failed to clear cache: ", error)
-    useToast().add({
+    toast.add({
       color: "error",
       title: i18n.global.t("skye.toasts.clearCacheFailed"),
       description: error as string,
@@ -335,13 +336,13 @@ async function loginSoundcloud() {
   try {
     const token = await invoke<string>("login_soundcloud")
     config.value.oauthToken = token
-    useToast().add({
+    toast.add({
       color: "success",
       title: i18n.global.t("skye.toasts.loginSuccess"),
     })
   } catch (error) {
     console.error("Failed to login Soundcloud: ", error) // 打印错误信息
-    useToast().add({
+    toast.add({
       color: "error",
       title: i18n.global.t("skye.toasts.loginFailed"),
       description: error as string,

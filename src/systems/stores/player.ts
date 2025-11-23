@@ -8,13 +8,13 @@ import {
   playIndex as thePlayIndex,
 } from "../player/listening-list"
 import type { Track } from "@/utils/types"
-import Hls, { ErrorData } from "hls.js"
+import Hls, { type ErrorData } from "hls.js"
 import { i18n } from "../i18n"
 import { getCurrentWindow } from "@tauri-apps/api/window"
 import { getArtist, getCoverUrl, replaceImageUrl } from "@/utils/utils"
 import { M3U8_CACHE_MANAGER } from "../player/cache"
 import { CachedLoader } from "../player/loader"
-import { Ref } from "vue"
+import type { Ref } from "vue"
 import { config } from "../config"
 import { addToHistory } from "@/utils/api"
 
@@ -35,7 +35,7 @@ class PlayerState {
   isPaused: boolean = true
   pendingDuration: number | undefined
   isFullscreen: boolean = false
-  
+
   listenIndex: number = -1
   playOrder: PlayOrder = PlayOrder.Ordered
 }

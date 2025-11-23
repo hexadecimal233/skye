@@ -1,9 +1,11 @@
 <template>
   <div class="mx-auto flex h-screen flex-col bg-muted relative overflow-hidden">
     <!-- Background -->
-    <div v-show="config.bg"
+    <div
+      v-show="config.bg"
       class="absolute inset-0 bg-cover bg-fixed bg-center opacity-15 dark:opacity-10 background transition-all duration-700 ease-in-out z-9999 pointer-events-none"
-      :style="{ backgroundImage: `url(${config.bg})` }" :class="{ 'blur-sm scale-105': config.bgBlur }"></div>
+      :style="{ backgroundImage: `url(${config.bg})` }"
+      :class="{ 'blur-sm scale-105': config.bgBlur }"></div>
 
     <TitleBar />
 
@@ -25,28 +27,41 @@
 
         <!-- Right Side: Content Browser -->
         <div class="flex flex-col flex-1">
-          <div class="bg-default rounded-lg flex flex-1 flex-col gap-4 px-6 py-4 overflow-y-hidden mx-2">
+          <div
+            class="bg-default rounded-lg flex flex-1 flex-col gap-4 px-6 py-4 overflow-y-hidden mx-2">
             <!-- Search Bar -->
             <div class="w-full flex items-center gap-2">
-              <UButton color="neutral" icon="i-mingcute-left-line" variant="subtle" @click="$router.back()" />
+              <UButton
+                color="neutral"
+                icon="i-mingcute-left-line"
+                variant="subtle"
+                @click="$router.back()" />
               <UFieldGroup>
-                <UInputMenu leading-icon="i-mingcute-search-line" :items="searchSuggestions"
-                  v-model:search-term="searchTerm" :placeholder="$t('skye.main.search')"
-                  @keydown.enter.prevent="handleSearch" @update:model-value="(value) => searchTerm = value"
+                <UInputMenu
+                  leading-icon="i-mingcute-search-line"
+                  :items="searchSuggestions"
+                  v-model:search-term="searchTerm"
+                  :placeholder="$t('skye.main.search')"
+                  @keydown.enter.prevent="handleSearch"
+                  @update:model-value="(value) => searchTerm = value"
                   class="w-64" />
-                <UButton color="neutral" icon="i-mingcute-close-line" variant="outline" @click="searchTerm = ''" />
+                <UButton
+                  color="neutral"
+                  icon="i-mingcute-close-line"
+                  variant="outline"
+                  @click="searchTerm = ''" />
               </UFieldGroup>
             </div>
 
-
             <!-- Page -->
             <router-view v-slot="{ Component }">
-              <OverlayScrollbarsComponent defer ref="scrollbarRef" :options="{ scrollbars: { theme: scrollbarTheme } }">
+              <OverlayScrollbarsComponent
+                defer
+                ref="scrollbarRef"
+                :options="{ scrollbars: { theme: scrollbarTheme } }">
                 <!-- Set H-full for VirtualList to work properly -->
                 <UContainer class="flex-col flex h-full sm:px-0.5 lg:px-0.5 px-0.5">
-                  <div class="my-2 text-2xl font-bold">
-                    {{ getPageTitle() }}
-                  </div>
+                  <div class="my-2 text-2xl font-bold">{{ getPageTitle() }}</div>
 
                   <div class="flex-1 h-full">
                     <Transition name="blur" mode="out-in">

@@ -1,11 +1,17 @@
 <template>
   <div class="flex flex-col">
     <div class="grid grid-cols-3 gap-4 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
-      <div v-for="item in items" :key="item.playlist?.id ?? item.system_playlist!.id" @click="openPlaylist(item)"
+      <div
+        v-for="item in items"
+        :key="item.playlist?.id ?? item.system_playlist!.id"
+        @click="openPlaylist(item)"
         :title="item.playlist?.title ?? item.system_playlist!.title"
         class="bg-elevated rounded-md flex flex-col gap-1 overflow-hidden shadow-xs transition-all hover:-translate-y-1 hover:cursor-pointer hover:opacity-70">
         <div class="bg-accented relative aspect-square w-full">
-          <img v-if="getImageUrl(item).value" :src="getImageUrl(item).value" alt="cover"
+          <img
+            v-if="getImageUrl(item).value"
+            :src="getImageUrl(item).value"
+            alt="cover"
             class="h-full w-full object-cover" />
           <USkeleton v-else class="absolute inset-0 h-full w-full rounded-none" />
         </div>

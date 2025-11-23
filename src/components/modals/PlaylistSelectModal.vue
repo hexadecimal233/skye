@@ -1,36 +1,39 @@
 <template>
-    <UModal :close="{ onClick: () => emit('close', false) }" :title="$t('skye.playlistSelectModal.title')">
-        <template #body>
-            <UTabs :items="items">
-                <template #all>
-                    <div class="max-h-96 overflow-y-auto" ref="scrollContainer">
-                        <div v-if="loading && data.length === 0" class="flex justify-center p-4">
-                            <!-- TODO: Spinner -->
-                        </div>
-                        <div v-else-if="error" class="text-red-500 p-4">
-                            {{ $t('skye.common.loadFail') }}
-                        </div>
-                        <div v-else-if="data.length === 0" class="text-gray-500 p-4">
-                            {{ $t('skye.common.empty') }}
-                        </div>
-                        <div v-else class="space-y-2 p-2">
-                            <MiniPlaylist v-for="playlist in data" :key="playlist.id" :playlist="playlist"
-                                @click="selectPlaylist(playlist)" />
-                            <div v-if="loading && data.length > 0" class="flex justify-center p-4">
-                                <USpinner />
-                            </div>
-                            <div v-if="!hasNext && data.length > 0" class="text-center text-gray-500 p-4">
-                                {{ $t('skye.common.noMore') }}
-                            </div>
-                        </div>
-                    </div>
-                </template>
-                <template #create>
-                    <!-- TODO: Create playlist -->
-                </template>
-            </UTabs>
+  <UModal
+    :close="{ onClick: () => emit('close', false) }"
+    :title="$t('skye.playlistSelectModal.title')">
+    <template #body>
+      <UTabs :items="items">
+        <template #all>
+          <div class="max-h-96 overflow-y-auto" ref="scrollContainer">
+            <div v-if="loading && data.length === 0" class="flex justify-center p-4">
+              <!-- TODO: Spinner -->
+            </div>
+            <div v-else-if="error" class="text-red-500 p-4">{{ $t('skye.common.loadFail') }}</div>
+            <div v-else-if="data.length === 0" class="text-gray-500 p-4">
+              {{ $t('skye.common.empty') }}
+            </div>
+            <div v-else class="space-y-2 p-2">
+              <MiniPlaylist
+                v-for="playlist in data"
+                :key="playlist.id"
+                :playlist="playlist"
+                @click="selectPlaylist(playlist)" />
+              <div v-if="loading && data.length > 0" class="flex justify-center p-4">
+                <USpinner />
+              </div>
+              <div v-if="!hasNext && data.length > 0" class="text-center text-gray-500 p-4">
+                {{ $t('skye.common.noMore') }}
+              </div>
+            </div>
+          </div>
         </template>
-    </UModal>
+        <template #create>
+          <!-- TODO: Create playlist -->
+        </template>
+      </UTabs>
+    </template>
+  </UModal>
 </template>
 
 <script setup lang="ts">

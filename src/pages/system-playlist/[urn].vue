@@ -24,13 +24,14 @@ const props = defineProps<{
 const loading = ref(true)
 const currentPlaylist = ref<SystemPlaylist>()
 const tracks = ref<Track[]>([])
+const toast = useToast()
 
 onMounted(async () => {
   try {
     tracks.value = await getTracks(props.playlistId)
     loading.value = false
   } catch (e) {
-    useToast().add({
+    toast.add({
       color: "error",
       title: i18n.global.t("skye.common.error"),
     })
