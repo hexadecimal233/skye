@@ -22,7 +22,7 @@
   </div>
 </template>
 
-<script setup lang="ts" name="PlaylistView">
+<script setup lang="ts" name="LibraryView">
 import { onMounted, computed } from "vue"
 import { useLibrary } from "@/utils/api"
 import { i18n } from "@/systems/i18n"

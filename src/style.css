@@ -2,6 +2,9 @@
 @import "@nuxt/ui";
 @import "./assets/themes/skye.css";
 @import "./assets/themes/cryolite.css";
+@import "./assets/themes/netease.css";
+@import "./assets/themes/soundcloud.css";
+@import "./assets/themes/spotify.css";
 
 :root {
   @apply select-none selection:bg-accented;
@@ -9,19 +12,32 @@
   /* modify overall font size */
   font-size: 17px;
 
+  /*
   --ui-bg: white;
   --ui-bg-muted: var(--ui-color-neutral-50);
   --ui-bg-elevated: var(--ui-color-neutral-200);
   --ui-bg-accented: var(--ui-color-neutral-300);
   --ui-bg-inverted: var(--ui-color-neutral-900);
+  */
 }
 
+/*
 .dark {
   --ui-bg: var(--ui-color-neutral-900);
   --ui-bg-muted: var(--ui-color-neutral-800);
   --ui-bg-elevated: var(--ui-color-neutral-700);
   --ui-bg-accented: var(--ui-color-neutral-600);
   --ui-bg-inverted: white;
+}
+  */
+
+
+@utility grid-cards {
+  @apply grid grid-cols-3 gap-4 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6
+}
+
+@utility custom-card-flex {
+  @apply flex max-w-64 cursor-pointer flex-col gap-1 rounded-md transition-all hover:opacity-70
 }
 
 /* Page transition */

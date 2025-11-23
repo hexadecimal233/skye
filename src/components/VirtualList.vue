@@ -54,6 +54,8 @@ const measureElement = (el: any) => {
     return
   }
 
+  console.log("measureElement", el.dataset.index)
+
   rowVirtualizer.value.measureElement(el)
 
   return undefined

@@ -1,15 +1,14 @@
 <template>
-  <div class="flex flex-col h-full">
-    <div v-if="currentPlaylist">{{ currentPlaylist.title }}</div>
+  <div v-if="currentPlaylist" class="flex flex-col h-full">
+    <div class="text-xl">{{ currentPlaylist.title }}</div>
     <TrackList
-      v-if="currentPlaylist"
       :tracks="(tracks as Track[])"
-      :parent-playlist="currentPlaylist"
+      :playlist-id="currentPlaylist.id.toString()"
       :loading="loading" />
   </div>
 </template>
 
-<script setup lang="ts" name="PlaylistView">
+<script setup lang="ts">
 import { Track, UserPlaylist } from "@/utils/types"
 import { computed, onMounted, ref } from "vue"
 import { fetchUserPlaylist } from "@/systems/playlist-cache"

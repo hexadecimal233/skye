@@ -11,6 +11,12 @@ export const THEMES = [
   "skye-dark",
   "cryolite",
   "cryolite-dark",
+  "soundcloud",
+  "soundcloud-dark",
+  "spotify",
+  "spotify-dark",
+  "netease",
+  "netease-dark",
   "nuxt",
   "nuxt-dark",
 ] as const

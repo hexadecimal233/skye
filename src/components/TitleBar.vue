@@ -1,6 +1,6 @@
 <template>
   <div
-    class="w-full px-2 py-1 flex from-primary/5 to-secondary/5 z-10 bg-linear-to-r"
+    class="w-full px-2 py-1 flex from-primary/5 to-secondary/5 bg-linear-to-r"
     @mousedown="Window.getCurrent().startDragging()">
     <div class="flex items-center gap-2" @mousedown.stop @click.stop="clicksFunc()">
       <i-mingcute-moon-cloudy-line class="text-primary" />

@@ -86,7 +86,7 @@ export const useUserStore = defineStore("user", {
         const ids: number[] = []
         do {
           await trackLikeCollection.fetchNext()
-          ids.push(...trackLikeCollection.data.value)
+          ids.push(...trackLikeCollection.newData.value)
         } while (trackLikeCollection.hasNext.value && !trackLikeCollection.error.value)
         this.likedTrackIds = ids
       } catch (err) {

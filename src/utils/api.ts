@@ -2,7 +2,7 @@ import { fetch } from "@tauri-apps/plugin-http"
 import { shallowRef } from "vue"
 import { config } from "@/systems/config"
 import type {
-  CollectionResp,
+  PartitionedCollection,
   Comment,
   FacetItem,
   M3U8Info,
@@ -19,6 +19,9 @@ import type {
   TrackLike,
   Transcoding,
   WebProfile,
+  BaseCollection,
+  UserActivity,
+  Selection,
 } from "./types"
 import { useUserStore } from "@/systems/stores/user"
 
@@ -88,7 +91,7 @@ async function requestV2Api(
       method,
       headers: {
         Authorization: `OAuth ${config.value.oauthToken}`,
-        ...(body ? { Accept: "application/json" } : {}),
+        ...(body ? { "Content-Type": "application/json", Accept: "*/*" } : {}),
         "User-Agent":
           "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36",
         "x-datadome-clientid":
@@ -319,16 +322,19 @@ export function useSearchAlbums(query: string, filters: FacetQuery[]) {
 
 // User state related methods
 export async function getFollowersIds() {
-  return (await getV2ApiJson<CollectionResp<number>>("me/followers/ids")).collection
+  return (await getV2ApiJson<PartitionedCollection<number>>("me/followers/ids")).collection
 }
 
 export async function getFollowingIds(id: number) {
-  return (await getV2ApiJson<CollectionResp<number>>(`/users/${id}/followings/ids`)).collection
+  return (await getV2ApiJson<PartitionedCollection<number>>(`/users/${id}/followings/ids`))
+    .collection
 }
 
 export async function useMeSystemPlaylistLikeUrns() {
   return (
-    await getV2ApiJson<CollectionResp<string>>(`/me/system_playlist_likes/urns`, { limit: 5000 })
+    await getV2ApiJson<PartitionedCollection<string>>(`/me/system_playlist_likes/urns`, {
+      limit: 5000,
+    })
   ).collection
 }
 
@@ -337,18 +343,21 @@ export function useMeTrackLikeIds() {
 }
 
 export async function useMePlaylistLikeIds() {
-  return (await getV2ApiJson<CollectionResp<number>>(`/me/playlist_likes/ids`, { limit: 5000 }))
-    .collection
+  return (
+    await getV2ApiJson<PartitionedCollection<number>>(`/me/playlist_likes/ids`, { limit: 5000 })
+  ).collection
 }
 
 export async function useMeTrackRepostIds() {
-  return (await getV2ApiJson<CollectionResp<number>>(`/me/track_reposts/ids`, { limit: 200 }))
-    .collection
+  return (
+    await getV2ApiJson<PartitionedCollection<number>>(`/me/track_reposts/ids`, { limit: 200 })
+  ).collection
 }
 
 export async function useMePlaylistRepostIds() {
-  return (await getV2ApiJson<CollectionResp<number>>(`/me/playlist_reposts/ids`, { limit: 200 }))
-    .collection
+  return (
+    await getV2ApiJson<PartitionedCollection<number>>(`/me/playlist_reposts/ids`, { limit: 200 })
+  ).collection
 }
 
 /**
@@ -398,7 +407,7 @@ export async function getUser(id: number) {
 }
 
 export async function getSpolight(id: number) {
-  const response = await getV2ApiJson<CollectionResp<Track>>(`/users/${id}/spotlight`, {
+  const response = await getV2ApiJson<PartitionedCollection<Track>>(`/users/${id}/spotlight`, {
     limit: 10,
   })
   return response.collection
@@ -409,16 +418,23 @@ export async function getWebProfiles(id: number) {
 }
 
 export async function getRelatedArtists(id: number) {
-  const response = await getV2ApiJson<CollectionResp<SCUser>>(`/users/${id}/relatedartists`, {
-    creators_only: false,
-    page_size: 12,
-    limit: 12,
-  })
+  const response = await getV2ApiJson<PartitionedCollection<SCUser>>(
+    `/users/${id}/relatedartists`,
+    {
+      creators_only: false,
+      page_size: 12,
+      limit: 12,
+    },
+  )
   return response.collection
 }
 
 export async function getUserFromName(name: string) {
   return await resolveUrl<SCUser>(`https://soundcloud.com/${name}`)
+}
+
+export async function getSystemPlaylist(urn: string) {
+  return await resolveUrl<SystemPlaylist>(`https://soundcloud.com/discover/sets/${urn}`)
 }
 
 export async function getTrackStation(id: number) {
@@ -433,15 +449,49 @@ export async function getArtistStation(id: number) {
   )
 }
 
+export async function getRecommendations() {
+  return (
+    await getV2ApiJson<PartitionedCollection<Selection>>(`/mixed-selections`, {
+      limit: 10,
+    })
+  ).collection
+}
+
+export async function getNewTrackUsers() {
+  return (
+    await getV2ApiJson<BaseCollection<UserActivity>>(`/me/artist-shortcuts`, {
+      limit: 1000,
+    })
+  ).collection
+}
+
+export async function getFollowSuggestions() {
+  return (
+    await getV2ApiJson<BaseCollection<UserActivity>>(`/me/suggested/users/who_to_follow`, {
+      limit: 21,
+      view: "recommended-first",
+    })
+  ).collection
+}
+
+// /announcements
+// export async function getAnnouncements() { }
+
+// activities
+// export async function getActivities() { }
+
 export async function getSearchSuggestions(query: string) {
   return (
-    await getV2ApiJson<CollectionResp<SearchSuggestion>>(`/search/queries`, { q: query, limit: 10 })
+    await getV2ApiJson<PartitionedCollection<SearchSuggestion>>(`/search/queries`, {
+      q: query,
+      limit: 10,
+    })
   ).collection
 }
 
 export async function getFeaturedProfiles(id: number) {
   return (
-    await getV2ApiJson<CollectionResp<SCUser>>(`/users/${id}/featured-profiles`, {
+    await getV2ApiJson<PartitionedCollection<SCUser>>(`/users/${id}/featured-profiles`, {
       limit: 10,
     })
   ).collection
@@ -606,6 +656,43 @@ export async function addToHistory(track: Track) {
 }
 
 /**
+ * GraphQL API
+ */
+
+/**
+ * Link Shortener
+ */
+
+interface OpenAPIResponse {
+  shortLink: string
+  expiresAt: number
+}
+
+export async function shortenLink(link: string) {
+  try {
+    const post = await fetch("https://shrinklink.soundcloud.com/create", {
+      method: "POST",
+      body: JSON.stringify({
+        longLink: link,
+        a: link,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+    if (post.status !== 201) {
+      throw new Error(`shortenLink error: ${post.status}`)
+    }
+
+    const res = (await post.json()) as OpenAPIResponse
+    return res
+  } catch (err) {
+    console.error("shortenLink error:", err)
+    throw err
+  }
+}
+
+/**
  * Internal API Utils
  */
 
@@ -621,7 +708,7 @@ function uuidv4() {
   )
 }
 
-async function resolveUrl<T>(url: string) {
+export async function resolveUrl<T>(url: string) {
   return await getV2ApiJson<T>(`/resolve`, { url })
 }
 
@@ -638,6 +725,7 @@ function useCollection<T>(
   params: Record<string, any> = {}, // Only adds to the first request, and is not reactive, use reset to update
 ) {
   const data = shallowRef<T[]>([])
+  const newData = shallowRef<T[]>([])
   const loading = shallowRef(false)
   const error = shallowRef<any | null>(null)
   const hasNext = shallowRef(true)
@@ -657,11 +745,12 @@ function useCollection<T>(
     try {
       // Linked Partitioning is default to true ig
       const promise = nextHref
-        ? (getJson(nextHref) as Promise<CollectionResp<T>>)
+        ? (getJson(nextHref) as Promise<PartitionedCollection<T>>)
         : getV2ApiJson<T>(url, { ...params, limit })
-      const res = (await promise) as CollectionResp<T>
+      const res = (await promise) as PartitionedCollection<T>
 
-      data.value = [...data.value, ...(res.collection || [])] as T[]
+      newData.value = res.collection || []
+      data.value = [...data.value, ...newData.value] as T[]
       hasNext.value = !!res.next_href
       nextHref = res.next_href
     } catch (err) {
@@ -691,6 +780,7 @@ function useCollection<T>(
 
   return {
     data,
+    newData,
     loading,
     error,
     hasNext,

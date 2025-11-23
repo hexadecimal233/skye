@@ -66,6 +66,12 @@ Report Issues / Submit Feature Requests: [Issues](https://github.com/hexadecimal
 
 Pull Requests: [Pull Requests](https://github.com/hexadecimal233/skye/pulls)
 
+## Trivial stuff
+
+[API Endpoint Reference](apis.md)
+
+Separating the CSS generation script and API stuff is planned.
+
 <!-- 也许加一个捐助功能 -->
 
 <!--
@@ -79,14 +85,13 @@ Pull Requests: [Pull Requests](https://github.com/hexadecimal233/skye/pulls)
 - [ ] Scrobbling support
 - [ ] DJ Support
 - [ ] Watch Router updates on dynamic views 
-- [ ] Ulink is glitcing
-- [ ] Lyrics service
+- [ ] Ulink is glitcing ( for tracks etc)
+- [ ] Lyrics service ( not rendering correctly )
 - [ ] icon start to load online again...
 - [ ] skye.common.loading skye.common.loadMore skye.common.noMore skye.common.empty skye.common.emptyDesc 统一化
 - [ ] music title loading animation
 - [ ] Make tags work
 - [ ] add share modal
 - [ ] add tooltips to icon-only buttons
-- [ ] watch immediate options
 - [ ] universal loading & error handling
 -->

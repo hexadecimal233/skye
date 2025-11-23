@@ -28,6 +28,7 @@ components.d.ts
 typed-router.d.ts
 
 # User-specific files
+scripts/*.js
 
 # some stuff about reverse engineering
 internals 

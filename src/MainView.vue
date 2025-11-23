@@ -1,6 +1,7 @@
 <template>
   <div class="mx-auto flex h-screen flex-col bg-muted relative overflow-hidden">
     <!-- Background -->
+    <!-- FIXME: BG paths with spaces will not work -->
     <div
       v-show="config.bg"
       class="absolute inset-0 bg-cover bg-fixed bg-center opacity-15 dark:opacity-10 background transition-all duration-700 ease-in-out z-9999 pointer-events-none"
@@ -66,7 +67,7 @@
                   <div class="flex-1 h-full">
                     <Transition name="blur" mode="out-in">
                       <keep-alive
-                        include="DownloadsView,FeedsView,FollowingView,HistoryView,LibraryView,LikesView,RadioView,SettingsView">
+                        include="DownloadsView,FeedsView,FollowingView,HistoryView,LibraryView,LikesView,RadioView,RecommendationView,SettingsView,ToolboxView">
                         <component :is="Component" />
                       </keep-alive>
                     </Transition>
@@ -142,8 +143,14 @@ function handleSearch() {
   }
 }
 
+// TODO: remember last page
 const items = computed(() => [
   [
+    {
+      label: i18n.t("skye.main.recommendations"),
+      to: "/recommendations",
+      icon: "i-mingcute-home-3-line",
+    },
     { label: i18n.t("skye.main.feeds"), to: "/feeds", icon: "i-mingcute-rss-line" },
     { label: i18n.t("skye.main.likes"), to: "/likes", icon: "i-mingcute-heart-line" },
     { label: i18n.t("skye.main.library"), to: "/library", icon: "i-mingcute-playlist-line" },
@@ -153,6 +160,7 @@ const items = computed(() => [
   ],
   [
     { label: i18n.t("skye.main.downloads"), to: "/downloads", icon: "i-mingcute-download-line" },
+    { label: i18n.t("skye.main.toolbox"), to: "/toolbox", icon: "i-mingcute-box-3-line" },
     { label: i18n.t("skye.main.settings"), to: "/settings", icon: "i-mingcute-settings-3-line" },
   ],
 ])

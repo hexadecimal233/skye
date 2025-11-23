@@ -3,7 +3,7 @@
     <div class="relative size-14 shrink-0">
       <div
         @click="() => {
-          if (player.isPlayingTrack(props.track) && !player.isPaused) { player.pause() } else { player.play(props.track) }
+          if (player.isPlayingTrack(props.track) && !player.isPaused) { player.pause() } else { player.play(props.track, tracks) }
         }
         "
         class="absolute inset-0 size-full flex items-center justify-center opacity-0 hover:opacity-60 bg-black rounded-sm transition-opacity cursor-pointer">
@@ -48,7 +48,6 @@ const player = usePlayerStore()
 const props = defineProps<{
   track: Track
   tracks?: Track[]
-  listeningIndex?: number
   hidePlay?: boolean
 }>()
 </script>

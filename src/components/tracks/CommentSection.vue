@@ -20,7 +20,7 @@
         <div class="text-highlighted text-lg font-bold">{{ track.comment_count }}comments</div>
         <div class="flex-1"></div>
         <span>{{ i18n.global.t("skye.comment.sortBy") }}</span>
-        <USelect v-model="sort" :items="sortTypes" />
+        <USelect v-model="sort" :items="sortTypes" class="w-24" />
       </div>
 
       <div class="flex flex-col gap-2">

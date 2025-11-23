@@ -5,7 +5,6 @@ import * as schema from "@/systems/db/schema"
 import { asc, inArray } from "drizzle-orm"
 import { PlayOrder, usePlayerStore } from "../stores/player"
 
-// FIXME: after delete current index should also be changed
 // FIXME: shffle list not persistient after restarting app
 
 export const listeningList = ref<Track[]>([])
@@ -69,6 +68,12 @@ async function refreshTrackIds() {
       set: { index: schema.listeningList.index },
     })
 
+  // FIXME: deleting playing tracks before the current index can still ause index shift
+  // attempt to stop playback if the current track is deleted
+  if (tracksToDelete.includes(usePlayerStore().listenIndex)) {
+    usePlayerStore().pause()
+  }
+
   shuffle()
 }
 
@@ -106,7 +111,7 @@ export async function playIndex(index: number) {
 
 export async function addAndPlay(track: Track, replacedTracklist?: Track[]) {
   if (replacedTracklist) {
-    listeningList.value = replacedTracklist
+    listeningList.value = JSON.parse(JSON.stringify(replacedTracklist)) // clone the existing tracklist
     // If the track is in the replaced tracklist, move it to the current index
     const trackIndex = replacedTracklist.findIndex((t) => t.id === track.id)
     if (trackIndex !== -1) {
@@ -117,8 +122,8 @@ export async function addAndPlay(track: Track, replacedTracklist?: Track[]) {
   }
 
   await addToListeningList(track) // this called when replace to ensure we are playing the upcoming track
-  usePlayerStore().listenIndex = listeningList.value.findIndex((t) => t.id === track.id)
-  trackUpdateCallback(usePlayerStore().listenIndex)
+  const newIndex = listeningList.value.findIndex((t) => t.id === track.id)
+  playIndex(newIndex)
 }
 
 export async function removeSong(idx: number) {
@@ -130,6 +135,7 @@ export async function removeSong(idx: number) {
 export async function removeMultipleSongs(indexes: number[]) {
   if (!indexes.length) return
 
+  // prevent access errors
   const sortedIndexes = [...indexes].sort((a, b) => b - a)
 
   for (const idx of sortedIndexes) {

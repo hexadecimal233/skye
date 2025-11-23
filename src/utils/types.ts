@@ -3,15 +3,18 @@
 
 export interface TrackLike {
   created_at: Date
-  kind: TrackLikeKind
+  kind: "like"
   track: Track
 }
 
-export type TrackLikeKind = "like"
+export type Kind = "track" | "playlist" | "system-playlist" | "user"
 
-export interface PartialTrack {
+export interface WithKind<T extends Kind = Kind> {
+  kind: T
+}
+
+export interface PartialTrack extends WithKind<"track"> {
   id: number
-  kind: TrackKind
   monetization_model: MonetizationModel
   policy: Policy
 }
@@ -63,8 +66,6 @@ export interface Track extends PartialTrack {
 }
 
 export type EmbeddableBy = "all" | "me"
-
-export type TrackKind = "track"
 
 export type License = "all-rights-reserved" | "cc-by-nc-sa" | "cc-by" | "cc-by-nc"
 
@@ -140,7 +141,7 @@ export type Sharing = "public" | "private"
 
 export type State = "finished"
 
-export interface SCUser {
+export interface SCUser extends WithKind<"user"> {
   avatar_url: string
   city: null | string
   comments_count: number
@@ -155,7 +156,6 @@ export interface SCUser {
   full_name: string
   groups_count: number
   id: number
-  kind: UserKind
   last_modified: Date
   last_name: string
   likes_count: number
@@ -186,13 +186,12 @@ export interface Product {
 
 export type ID = "creator-pro-unlimited" | "free" | "creator-creator-mid-tier" | "creator-mid-tier"
 
-export interface User {
+export interface User extends WithKind<"user"> {
   avatar_url: string
   first_name: string
   followers_count: number
   full_name: string
   id: number
-  kind: UserKind
   last_modified: Date
   last_name: string
   permalink: string
@@ -214,8 +213,6 @@ export interface Badges {
   pro_unlimited: boolean
   verified: boolean
 }
-
-export type UserKind = "user" | "track" | "playlist" | "system-playlist"
 
 export interface Visuals {
   urn: string
@@ -275,12 +272,11 @@ export enum SetType {
   Single = "single",
 }
 
-export interface UserPlaylist extends BasePlaylist {
+export interface UserPlaylist extends BasePlaylist, WithKind<"playlist"> {
   artwork_url: null | string
   created_at: Date
   duration: number
   id: number
-  kind: PlaylistKind
   last_modified: Date
   likes_count: number
   managed_by_feeds: boolean
@@ -303,9 +299,7 @@ export interface UserPlaylist extends BasePlaylist {
   tracks?: PartialTrack[]
 }
 
-export type PlaylistKind = "playlist"
-
-export interface SystemPlaylist extends BasePlaylist {
+export interface SystemPlaylist extends BasePlaylist, WithKind<"system-playlist"> {
   urn: string
   query_urn: null | string
   permalink: string
@@ -325,7 +319,6 @@ export interface SystemPlaylist extends BasePlaylist {
   is_public: boolean
   made_for: User | null
   user: User
-  kind: SystemPlaylistKind
   id: string
 }
 
@@ -338,8 +331,6 @@ export type TrackingFeatureName =
   | "weekly"
   | "your-moods"
 
-export type SystemPlaylistKind = "system-playlist"
-
 export type PlaylistType = "PLAYLIST" | "TRACK_STATION" | "ARTIST_STATION"
 
 export interface Seed {
@@ -349,8 +340,11 @@ export interface Seed {
 
 export type PlaylistLikeType = "playlist-like" | "system-playlist-like"
 
-export interface CollectionResp<T> {
+export interface BaseCollection<T> {
   collection: T[]
+}
+
+export interface PartitionedCollection<T> extends BaseCollection<T> {
   next_href: string | null
   query_urn: string | null
 }
@@ -407,7 +401,7 @@ export interface WebProfile {
 }
 
 export interface Comment {
-  kind: CommentKind
+  kind: "comment"
   id: number
   body: string
   created_at: Date
@@ -418,8 +412,6 @@ export interface Comment {
   user: User
   track: Track
 }
-
-export type CommentKind = "comment"
 
 export interface Self {
   urn: string
@@ -451,7 +443,7 @@ export interface QueryCollection<T> {
   variant: string
 }
 
-export interface Me {
+export interface Me extends WithKind<"user"> {
   avatar_url: string
   blocked_tracks_count: number
   city: string
@@ -477,7 +469,6 @@ export interface Me {
   groups_count: number
   hidden_tracks_count: number
   id: number
-  kind: string
   last_modified: Date
   last_name: string
   likes_count: number
@@ -537,7 +528,7 @@ export interface Quota {
 
 export interface M3U8Info {
   url: string
-  licenseUrls: any // an object containing playready/fairplay urls
+  licenseUrls: unknown // an object containing playready/fairplay urls
 }
 
 // they are the same huh
@@ -564,7 +555,7 @@ export interface FacetDetail {
 }
 
 export interface SearchCollection<T extends Track | UserPlaylist | SCUser>
-  extends CollectionResp<T> {
+  extends PartitionedCollection<T> {
   total_results: number
   facets: FacetItem[]
 }
@@ -599,3 +590,25 @@ export type ContentTierFilter = "SUB_HIGH_TIER"
 
 export type GenreFilter = string
 export type LocationFilter = string
+
+export interface Selection {
+  urn: string
+  query_urn: string
+  title: string
+  description: null
+  tracking_feature_name: string
+  last_updated: Date | null
+  style: null
+  social_proof: null
+  social_proof_users: null
+  items: PartitionedCollection<WithKind<Kind>>
+  kind: "selection"
+  id: string
+}
+
+export interface UserActivity {
+  user_urn: string
+  unread_update_at?: Date
+  has_read: boolean
+  user: User
+}

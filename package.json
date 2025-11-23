@@ -10,9 +10,12 @@
     "tauri": "tauri",
     "format": "biome format --write .",
     "lint": "biome lint --write .",
-    "check": "biome check --write ."
+    "check": "biome check --write .",
+    "make-theme": "tsc ./scripts/make-theme.ts --module nodenext && node ./scripts/make-theme.js"
   },
   "dependencies": {
+    "@applemusic-like-lyrics/core": "^0.2.0",
+    "@applemusic-like-lyrics/vue": "^0.2.0",
     "@nuxt/ui": "^4.1.0",
     "@tanstack/vue-table": "^8.21.3",
     "@tanstack/vue-virtual": "^3.13.12",

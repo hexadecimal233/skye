@@ -1,73 +1,61 @@
 <template>
-  <!-- TODO: Update UI -->
+  <!-- TODO: Dark mode force / lyric correct display -->
   <Transition
-    enter-active-class="transition-all duration-300 ease-out"
+    enter-active-class="transition-all duration-500 ease-in-out"
     enter-from-class="transform translate-y-full"
     enter-to-class="transform translate-y-0"
-    leave-active-class="transition-all duration-300 ease-in"
+    leave-active-class="transition-all duration-500 ease-in-out"
     leave-from-class="transform translate-y-0"
     leave-to-class="transform translate-y-full">
-    <div v-if="player.isFullscreen" class="fixed inset-0 size-full flex bg-default z-50">
-      <div class="w-full h-full flex flex-col">
+    <div v-show="player.isFullscreen" class="fixed inset-0 size-full flex z-50">
+      <div class="w-full h-full absolute inset-0 bg-default">
+        <BackgroundRender
+          :album="player.track ? replaceImageUrl(getCoverUrl(player.track), '1080x1080') : 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII='"
+          :flow-speed="player.isPaused ? 0.01 : 2"
+          class="size-full" />
+      </div>
+      <div class="w-full h-full flex flex-col z-1">
         <!-- 顶部控制栏 -->
         <div class="flex justify-between items-center p-4">
-          <button
-            @click="player.isFullscreen = false"
-            class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors">
-            <i-mingcute-close-line class="h-6 w-6" />
-          </button>
+          <UButton
+            icon="i-mingcute-close-line"
+            variant="ghost"
+            color="neutral"
+            size="xl"
+            @click="player.isFullscreen = false"></UButton>
           <div class="text-lg font-medium">Fullscreen Player</div>
           <div class="w-10"></div><!-- 占位符保持居中 -->
         </div>
 
         <!-- 主要内容区域 -->
-        <div class="flex-1 flex items-center justify-center">
-          <div class="text-center">
-            <div class="mb-8">
-              <!-- 这里可以添加专辑封面 -->
-              <div
-                class="w-64 h-64 mx-auto bg-gray-300 dark:bg-gray-700 rounded-lg flex items-center justify-center">
-                <span class="text-gray-500 dark:text-gray-400">Album Cover</span>
-              </div>
+        <div class="flex-1 flex size-full">
+          <!-- 左侧播放器控制区域 -->
+          <div class="flex flex-col items-center justify-center w-xl p-24 gap-4 shrink-0">
+            <div class="w-full aspect-square bg-muted rounded-lg flex items-center justify-center">
+              <img
+                v-if="player.track"
+                :src="replaceImageUrl(getCoverUrl(player.track), '1080x1080')"
+                class="size-full  object-cover rounded-lg shadow-xl" />
             </div>
 
-            <div class="mb-4">
-              <h2 class="text-2xl font-bold mb-2">{{ player.track?.title || 'Unknown Track' }}</h2>
-              <p class="text-lg text-gray-600 dark:text-gray-400">
-                {{ getArtist(player.track) || 'Unknown Artist' }}
-              </p>
+            <div v-if="player.track" class="text-center">
+              <p class="text-2xl font-bold">{{ player.track.title }}</p>
+              <p class="text-lg text-gray-600 dark:text-gray-400">{{ getArtist(player.track) }}</p>
             </div>
 
             <!-- 进度条 -->
-            <div class="mb-4">
-              <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-                <div
-                  class="bg-blue-500 h-2 rounded-full"
-                  :style="{ width: `${player.playProgress * 100}%` }"></div>
-              </div>
-            </div>
+            <PlayerProgress class="h-3" />
 
             <!-- 控制按钮 -->
-            <div class="flex justify-center space-x-4">
-              <button
-                @click="player.nextTrack(-1)"
-                class="p-3 rounded-full hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors">
-                <i-mingcute-skip-previous-line class="h-6 w-6" />
-              </button>
+            <PlayerControls />
+          </div>
 
-              <button
-                @click="player.isPaused ? player.resume() : player.pause()"
-                class="p-4 rounded-full bg-blue-500 text-white hover:bg-blue-600 transition-colors">
-                <i-mingcute-play-line v-if="player.isPaused" class="h-8 w-8" />
-                <i-mingcute-pause-line v-else class="h-8 w-8" />
-              </button>
-
-              <button
-                @click="player.nextTrack(1)"
-                class="p-3 rounded-full hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors">
-                <i-mingcute-skip-forward-line class="h-6 w-6" />
-              </button>
-            </div>
+          <!-- 右侧歌词区域 -->
+          <div class="flex-1 flex justify-center h-full min-w-0 px-4">
+            <Lyrics
+              :track="player.track"
+              v-if="player.track"
+              class="h-full text-4xl font-bold mix-blend-plus-lighter" />
           </div>
         </div>
       </div>
@@ -77,7 +65,9 @@
 
 <script setup lang="ts">
 import { usePlayerStore } from "@/systems/stores/player"
-import { getArtist } from "@/utils/utils"
+import { getArtist, getCoverUrl, replaceImageUrl } from "@/utils/utils"
+import { BackgroundRender } from "@applemusic-like-lyrics/vue"
+import Lyrics from "@/components/Lyrics.vue"
 
 const player = usePlayerStore()
 </script>

@@ -29,17 +29,20 @@ export enum PlayOrder {
 // FIXME: sometime play state is messed up after reload
 
 class PlayerState {
-  currentTime: number = 0
-  duration: number = Infinity
+  currentTime: number = 0 // in seconds
+  duration: number = Infinity // in seconds
   loading: boolean = false
   isPaused: boolean = true
-  pendingDuration: number | undefined
+  pendingDuration: number | undefined // in seconds
   isFullscreen: boolean = false
 
+  volume: number = 0.5
   listenIndex: number = -1
   playOrder: PlayOrder = PlayOrder.Ordered
 }
 // Player stuff
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)()
+let sourceNode: AudioNode | null = null
 let mediaRef: Ref<HTMLVideoElement | null> | undefined
 let hlsPlayer: Hls | undefined
 
@@ -56,6 +59,8 @@ export const usePlayerStore = defineStore("player", {
   getters: {
     track: (): Track | undefined => getCurrentTrack(),
     mediaRef: (): Ref<HTMLVideoElement | null> | undefined => mediaRef,
+    audioCtx: (): AudioContext => audioCtx,
+    sourceNode: (): AudioNode | null => sourceNode,
     playProgress: (state): number => {
       if (!isFinite(state.duration)) {
         return 0
@@ -64,6 +69,12 @@ export const usePlayerStore = defineStore("player", {
     },
   },
   actions: {
+    setVolume(volume: number) {
+      this.volume = volume
+      if (mediaRef?.value) {
+        mediaRef.value.volume = volume
+      }
+    },
     isPlayingTrack(track: Track): boolean {
       return this.track !== undefined && this.track.id === track.id
     },
@@ -87,6 +98,8 @@ export const usePlayerStore = defineStore("player", {
     },
 
     async nextTrack(offset: number = 1) {
+      this.pendingDuration = 0
+
       this.pause()
       const trackIndex = await getNextTrackIndex(offset)
 
@@ -176,6 +189,7 @@ export const usePlayerStore = defineStore("player", {
 
       const safeTime = Math.max(0, Math.min(time, this.duration))
       mediaRef.value.currentTime = safeTime
+      this.currentTime = safeTime // make sure time is synced instantly
     },
     async resume() {
       if (!mediaRef || !mediaRef.value || !this.track) {
@@ -209,6 +223,14 @@ export const usePlayerStore = defineStore("player", {
       }
 
       mediaRef = mref // directly pass reactivity
+
+      // create effect chain
+      sourceNode = audioCtx.createMediaElementSource(mediaRef.value!)
+      sourceNode.connect(audioCtx.destination)
+
+      // remember volume
+      this.setVolume(this.volume)
+
       // init MediaSession Handlers
       // NOTE: Updating Media here will cause OS not to display before clicking play
       if ("mediaSession" in navigator) {

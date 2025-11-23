@@ -46,7 +46,10 @@
               variant="outline" />
 
             <UButton @click="changeBg" icon="i-mingcute-file-upload-line" variant="outline" />
-            <UButton @click="bg = 'https://t.mwm.moe/moez'" icon="i-mdi-dice" variant="outline" />
+            <UButton
+              @click="bg = `https://t.mwm.moe/moez?t=${Date.now()}`"
+              icon="i-mdi-dice"
+              variant="outline" />
             <UButton @click="bg = ''" icon="i-mingcute-close-line" variant="outline" />
           </UFieldGroup>
         </UFormField>

@@ -1,47 +1,69 @@
 <template>
-  <div class="lyrics">
-    <div v-for="(line, index) in lines" :key="index" class="line">{{ line }}</div>
-  </div>
+  <!-- FIXME: lyrics keeps glitching -->
+  <LyricPlayer
+    align-anchor="top"
+    :lyric-lines="toRaw(lines)"
+    :current-time="player.currentTime * 1000"
+    @line-click="onClickLine" />
 </template>
 
 <script setup lang="ts">
 import { Track } from "@/utils/types"
-import { Client } from "lrclib-api"
-import { ref } from "vue"
+import { ref, watch, toRaw } from "vue"
+import { LyricPlayer } from "@applemusic-like-lyrics/vue"
+import { LyricLine, LyricLineMouseEvent } from "@applemusic-like-lyrics/core"
+import { usePlayerStore } from "@/systems/stores/player"
+import { fetchTrackLyrics } from "@/utils/lyrics"
+
+function onClickLine(event: LyricLineMouseEvent) {
+  if (isCurrentLyricsSynced.value) {
+    player.seek(event.line.getLine().startTime / 1000)
+    player.resume()
+  }
+}
 
 const props = defineProps<{
   track: Track
 }>()
 
-const client = new Client()
+const isCurrentLyricsSynced = ref(false)
 
-const lines = ref<string[]>([])
+const player = usePlayerStore()
 
-async function fetchLyrics() {
-  let artists = []
-  if (props.track.publisher_metadata?.artist) {
-    // soundcloud still does not support multiple artists :/
-    artists = props.track.publisher_metadata.artist.split(", ").map((artist) => artist.trim())
-  } else {
-    artists = [props.track.user.username.trim()]
-  }
-  for (const a of artists) {
-    const query = {
-      track_name: props.track.title,
-      artist_name: a,
-    }
-    try {
-      const unsynced = await client.getUnsynced(query)
+const lines = ref<LyricLine[]>([])
 
-      if (unsynced) {
-        lines.value = unsynced.map((line) => line.text)
-        return
-      }
-    } catch (error) {
-      console.error("Error fetching lyrics:", error)
-    }
-  }
-}
+watch(
+  () => props.track,
+  async (track) => {
+    // TODO: Lyrics cache
 
-fetchLyrics()
+    lines.value = []
+    isCurrentLyricsSynced.value = false
+
+    const result = await fetchTrackLyrics(track)
+
+    if (!result) return
+
+    isCurrentLyricsSynced.value = result.synced
+
+    lines.value = result.lyrics.map((line, i) => ({
+      words: [
+        {
+          word: line.text,
+          startTime: (line.startTime ?? 0) * 1000, // The LRC parsed results are in seconds
+          endTime: (result.lyrics[i + 1]?.startTime ?? track.full_duration / 1000) * 1000,
+          romanWord: "",
+          obscene: false,
+        },
+      ],
+      startTime: (line.startTime ?? 0) * 1000,
+      endTime: (result.lyrics[i + 1]?.startTime ?? track.full_duration / 1000) * 1000,
+      translatedLyric: "",
+      romanLyric: "",
+      isBG: false,
+      isDuet: false,
+    })) as LyricLine[]
+  },
+  { immediate: true },
+)
 </script>

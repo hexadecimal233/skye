@@ -1,0 +1,93 @@
+@import "tailwindcss";
+@import "@nuxt/ui";
+
+@layer components {
+  /* https://www.tints.dev */
+  [data-theme="netease"] {
+    --ui-radius: 0.25rem;
+
+    --ui-color-primary-50: oklch(0.958 0.016 17.55);
+    --ui-color-primary-100: oklch(0.925 0.029 17.74);
+    --ui-color-primary-200: oklch(0.843 0.065 18.55);
+    --ui-color-primary-300: oklch(0.77 0.104 19.73);
+    --ui-color-primary-400: oklch(0.699 0.149 21.64);
+    --ui-color-primary-500: oklch(0.622 0.209 25.7);
+    --ui-color-primary-600: oklch(0.53 0.178 25.72);
+    --ui-color-primary-700: oklch(0.432 0.145 25.71);
+    --ui-color-primary-800: oklch(0.332 0.111 25.63);
+    --ui-color-primary-900: oklch(0.241 0.081 25.78);
+    --ui-color-primary-950: oklch(0.184 0.062 25.76);
+
+    --ui-color-secondary-50: oklch(0.956 0.012 276.17);
+    --ui-color-secondary-100: oklch(0.914 0.022 272.07);
+    --ui-color-secondary-200: oklch(0.837 0.045 269.96);
+    --ui-color-secondary-300: oklch(0.751 0.071 269.19);
+    --ui-color-secondary-400: oklch(0.674 0.094 266.56);
+    --ui-color-secondary-500: oklch(0.592 0.106 264.55);
+    --ui-color-secondary-600: oklch(0.501 0.09 264.84);
+    --ui-color-secondary-700: oklch(0.406 0.073 265.29);
+    --ui-color-secondary-800: oklch(0.32 0.057 264.39);
+    --ui-color-secondary-900: oklch(0.225 0.041 264.88);
+    --ui-color-secondary-950: oklch(0.179 0.031 263.34);
+
+    --ui-color-info-50: oklch(0.964 0.026 217.88);
+    --ui-color-info-100: oklch(0.925 0.054 216.69);
+    --ui-color-info-200: oklch(0.851 0.123 212.99);
+    --ui-color-info-300: oklch(0.789 0.133 212.31);
+    --ui-color-info-400: oklch(0.72 0.121 212.33);
+    --ui-color-info-500: oklch(0.655 0.11 212.15);
+    --ui-color-info-600: oklch(0.552 0.093 212.39);
+    --ui-color-info-700: oklch(0.45 0.076 212.44);
+    --ui-color-info-800: oklch(0.338 0.057 212.8);
+    --ui-color-info-900: oklch(0.239 0.041 211.34);
+    --ui-color-info-950: oklch(0.185 0.031 214.31);
+
+    --ui-color-success-50: oklch(0.958 0.066 148.34);
+    --ui-color-success-100: oklch(0.915 0.143 147.86);
+    --ui-color-success-200: oklch(0.839 0.23 146.67);
+    --ui-color-success-300: oklch(0.773 0.211 146.76);
+    --ui-color-success-400: oklch(0.704 0.192 146.81);
+    --ui-color-success-500: oklch(0.64 0.175 146.74);
+    --ui-color-success-600: oklch(0.536 0.146 146.88);
+    --ui-color-success-700: oklch(0.436 0.12 146.69);
+    --ui-color-success-800: oklch(0.336 0.092 146.71);
+    --ui-color-success-900: oklch(0.236 0.065 147.11);
+    --ui-color-success-950: oklch(0.184 0.049 146.86);
+
+    --ui-color-warning-50: oklch(0.982 0.013 71.33);
+    --ui-color-warning-100: oklch(0.967 0.027 74.76);
+    --ui-color-warning-200: oklch(0.942 0.048 75.32);
+    --ui-color-warning-300: oklch(0.907 0.082 77.29);
+    --ui-color-warning-400: oklch(0.874 0.124 81.2);
+    --ui-color-warning-500: oklch(0.844 0.172 84.93);
+    --ui-color-warning-600: oklch(0.701 0.144 85.12);
+    --ui-color-warning-700: oklch(0.563 0.115 85.35);
+    --ui-color-warning-800: oklch(0.425 0.087 85.39);
+    --ui-color-warning-900: oklch(0.276 0.057 83.96);
+    --ui-color-warning-950: oklch(0.209 0.043 84.6);
+
+    --ui-color-error-50: oklch(0.958 0.016 12.9);
+    --ui-color-error-100: oklch(0.917 0.033 13.24);
+    --ui-color-error-200: oklch(0.837 0.072 16.59);
+    --ui-color-error-300: oklch(0.756 0.118 16.94);
+    --ui-color-error-400: oklch(0.677 0.172 19.05);
+    --ui-color-error-500: oklch(0.592 0.202 21.24);
+    --ui-color-error-600: oklch(0.505 0.172 21.29);
+    --ui-color-error-700: oklch(0.415 0.142 21.36);
+    --ui-color-error-800: oklch(0.324 0.11 21.45);
+    --ui-color-error-900: oklch(0.233 0.08 21);
+    --ui-color-error-950: oklch(0.186 0.063 21.89);
+
+    --ui-color-neutral-50: oklch(0.958 0.003 264.69);
+    --ui-color-neutral-100: oklch(0.913 0.007 277.28);
+    --ui-color-neutral-200: oklch(0.827 0.014 272.7);
+    --ui-color-neutral-300: oklch(0.75 0.02 265.96);
+    --ui-color-neutral-400: oklch(0.664 0.028 268.72);
+    --ui-color-neutral-500: oklch(0.579 0.026 266.76);
+    --ui-color-neutral-600: oklch(0.492 0.022 265.83);
+    --ui-color-neutral-700: oklch(0.405 0.018 268.26);
+    --ui-color-neutral-800: oklch(0.309 0.015 269.21);
+    --ui-color-neutral-900: oklch(0.225 0.009 255.6);
+    --ui-color-neutral-950: oklch(0.177 0.009 264.32);
+  }
+}
