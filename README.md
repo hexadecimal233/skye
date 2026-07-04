@@ -1,3 +1,10 @@
+> [!WARNING]
+> # The project is under refactoring, and the development has moved to [Codeberg](https://codeberg.org/hexzii/skye).
+>
+> The project will be archived soon.
+
+
+
 <div align="center">
 <img src="public/logo.png" alt="logo" width=400 />
 </div>
