@@ -1,20 +1,28 @@
 <template>
   <UContextMenu :items="items">
     <div>
-    <component :is="renderContent()" />
+      <component :is="renderContent()" />
     </div>
   </UContextMenu>
 </template>
 
 <script setup lang="tsx">
+import { useClipboard } from "@vueuse/core"
 import { computed } from "vue"
 import { useI18n } from "vue-i18n"
 
+const { copy } = useClipboard()
+const toast = useToast()
+
 const items = computed(() => [
   {
-    label: useI18n().t("cloudie.common.copy"),
+    label: useI18n().t("skye.common.copy"),
     action: () => {
-      navigator.clipboard.writeText(props.content) // FIXME: Copy fails
+      copy(props.content)
+      toast.add({
+        title: useI18n().t("skye.common.copySuccess"),
+        color: "success",
+      })
     },
   },
 ])

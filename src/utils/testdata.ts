@@ -1,21 +1,6 @@
-<template>
-  <div>
-    <CommentSection :track="track"></CommentSection>
-    <FullTrack :track="track" :stream-item="trackRepost" />
-    <FullPlaylist :playlist="playlist" :stream-items="undefined" />
-    <TwitterFullTrack :track="track" :stream-item="trackRepost" />
-    <TwitterFullPlaylist :playlist="playlist" :stream-items="undefined" />
-    <MiniUser :user="user" />
-    <MiniTrack :track="track" />
-    <MiniPlaylist :playlist="playlist" />
-    <MiniSystemPlaylist :playlist="systemPlaylist" />
-  </div>
-</template>
-
-<script setup lang="ts">
 import { SCUser, StreamItem, SystemPlaylist, Track, UserPlaylist } from "@/utils/types"
 
-const user = {
+export const user = {
   avatar_url: "https://i1.sndcdn.com/avatars-OQNGzHzVoOPkhX15-znhjbA-large.jpg",
   city: "Tây Ninh",
   comments_count: 0,
@@ -77,7 +62,7 @@ const user = {
   date_of_birth: null,
 } as SCUser
 
-const track = {
+export const track = {
   artwork_url: "https://i1.sndcdn.com/artworks-IyxrPn06CAX5fx22-j8XD7w-large.jpg",
   caption: "DUALITY is OUT NOW! ☯",
   commentable: true,
@@ -223,7 +208,7 @@ const track = {
   },
 } as Track
 
-const playlist = {
+export const playlist = {
   artwork_url: null,
   created_at: new Date("2025-10-31T07:39:15Z"),
   description: null,
@@ -2388,10 +2373,10 @@ const playlist = {
       policy: "MONETIZE",
     },
   ],
-  track_count: 356,
+  track_count: 356, // ive deleted some so mismatch
 } as UserPlaylist
 
-const systemPlaylist = {
+export const systemPlaylist = {
   urn: "soundcloud:system-playlists:artist-stations:1079866894",
   query_urn: null,
   permalink: "artist-stations:1079866894",
@@ -2488,7 +2473,7 @@ const systemPlaylist = {
   id: "soundcloud:system-playlists:artist-stations:1079866894",
 } as SystemPlaylist
 
-const trackRepost = {
+export const trackRepost = {
   created_at: new Date("2025-11-14T22:56:40Z"),
   type: "track",
   user: {
@@ -2522,4 +2507,3 @@ const trackRepost = {
     "If you're coming over from Tik-Tok, https://test.com/ @tewt welcome to the family! 🦋sssssssssssssssssssssssss🦋sssssssssssssssssssssssss🦋sssssssssssssssssssssssss🦋sssssssssssssssssssssssss🦋sssssssssssssssssssssssss🦋sssssssssssssssssssssssss",
   track,
 } as StreamItem
-</script>

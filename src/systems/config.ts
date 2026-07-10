@@ -7,10 +7,16 @@ import { useColorMode, useDebounceFn } from "@vueuse/core"
 import dayjs from "dayjs"
 
 export const THEMES = [
-  "cloudie",
-  "cloudie-dark",
+  "skye",
+  "skye-dark",
   "cryolite",
   "cryolite-dark",
+  "soundcloud",
+  "soundcloud-dark",
+  "spotify",
+  "spotify-dark",
+  "netease",
+  "netease-dark",
   "nuxt",
   "nuxt-dark",
 ] as const
@@ -24,7 +30,7 @@ class Config {
   noHistory: boolean = false // TODO: no history
   // 外观
   language: (typeof LANGUAGE_OPTIONS)[number] = "en"
-  theme: Theme = "cloudie"
+  theme: Theme = "skye"
   feedStyle: FeedStyle = "soundcloud"
   bg: string = ""
   bgBlur: boolean = false
@@ -58,7 +64,7 @@ watch(config, saveConfig, { deep: true })
 
 // 读取配置属性值
 async function getConfigValue<T>(key: keyof Config): Promise<T> {
-  store = await load("cloudie.json", {
+  store = await load("config.json", {
     autoSave: false,
     defaults: new Config() as any,
   })

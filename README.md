@@ -10,7 +10,7 @@
 </div>
 
 <h1 align="center">
-Cloudie 
+Skye 
 </h1>
 <p align="center">
 Yet another Open Source Kawaii Soundcloud Client.
@@ -18,8 +18,8 @@ Yet another Open Source Kawaii Soundcloud Client.
 <p align="center">
 <a href="https://ui.nuxt.com" target="_blank"><img src="https://img.shields.io/badge/Built%20with-Nuxt%20UI-00DC82?style=flat-square&logo=nuxt.js&logoColor=white" alt="Built with Nuxt UI"></a>
 <a href="https://www.rust-lang.org/" target="_blank"><img src="https://img.shields.io/badge/Powered%20by-Tauri-1b99a7?style=flat-square&logo=rust&logoColor=white" alt="Powered by Tauri"></a>
-<a href="https://github.com/hexadecimal233/cloudie/releases" target="_blank"><img src="https://img.shields.io/github/downloads/hexadecimal233/cloudie/total?style=flat-square&logo=github&logoColor=white" alt="GitHub Downloads"></a>
-<a href="https://github.com/hexadecimal233/cloudie/releases/latest" target="_blank"><img src="https://img.shields.io/github/v/release/hexadecimal233/cloudie?style=flat-square&logo=github&logoColor=white" alt="Latest Release"></a>
+<a href="https://github.com/hexadecimal233/skye/releases" target="_blank"><img src="https://img.shields.io/github/downloads/hexadecimal233/skye/total?style=flat-square&logo=github&logoColor=white" alt="GitHub Downloads"></a>
+<a href="https://github.com/hexadecimal233/skye/releases/latest" target="_blank"><img src="https://img.shields.io/github/v/release/hexadecimal233/skye?style=flat-square&logo=github&logoColor=white" alt="Latest Release"></a>
 </p>
 
 
@@ -69,9 +69,15 @@ For **Zed** users, you have to run the `ui:dev` task then use the `Debugger` to 
 3. Modify the migrations in `src-tauri/src/lib.rs` to include the new table.
 4. (Optional) Run the program using `pnpm tauri dev` to apply the migrations on-runtime.
 
-Report Issues / Submit Feature Requests: [Issues](https://github.com/hexadecimal233/cloudie/issues)
+Report Issues / Submit Feature Requests: [Issues](https://github.com/hexadecimal233/skye/issues)
 
-Pull Requests: [Pull Requests](https://github.com/hexadecimal233/cloudie/pulls)
+Pull Requests: [Pull Requests](https://github.com/hexadecimal233/skye/pulls)
+
+## Trivial stuff
+
+[API Endpoint Reference](apis.md)
+
+Separating the CSS generation script and API stuff is planned.
 
 <!-- 也许加一个捐助功能 -->
 
@@ -86,13 +92,13 @@ Pull Requests: [Pull Requests](https://github.com/hexadecimal233/cloudie/pulls)
 - [ ] Scrobbling support
 - [ ] DJ Support
 - [ ] Watch Router updates on dynamic views 
-- [ ] Ulink is glitcing
-- [ ] Lyrics service
+- [ ] Ulink is glitcing ( for tracks etc)
+- [ ] Lyrics service ( not rendering correctly )
 - [ ] icon start to load online again...
-- [ ] cloudie.common.loading cloudie.common.loadMore cloudie.common.noMore cloudie.common.empty cloudie.common.emptyDesc
+- [ ] skye.common.loading skye.common.loadMore skye.common.noMore skye.common.empty skye.common.emptyDesc 统一化
 - [ ] music title loading animation
 - [ ] Make tags work
 - [ ] add share modal
 - [ ] add tooltips to icon-only buttons
-- [ ] watch immediate options
+- [ ] universal loading & error handling
 -->

@@ -1,13 +1,14 @@
 <template>
-    <div class="flex flex-col h-full">
-        <div v-if="currentPlaylist">
-            {{ currentPlaylist.title }}
-        </div>
-        <TrackList v-if="currentPlaylist" :tracks="(tracks as Track[])" :parent-playlist="currentPlaylist" :loading="loading" />
-    </div>
+  <div v-if="currentPlaylist" class="flex flex-col h-full">
+    <div class="text-xl">{{ currentPlaylist.title }}</div>
+    <TrackList
+      :tracks="(tracks as Track[])"
+      :playlist-id="currentPlaylist.id.toString()"
+      :loading="loading" />
+  </div>
 </template>
 
-<script setup lang="ts" name="PlaylistView">
+<script setup lang="ts">
 import { Track, UserPlaylist } from "@/utils/types"
 import { computed, onMounted, ref } from "vue"
 import { fetchUserPlaylist } from "@/systems/playlist-cache"
@@ -17,15 +18,16 @@ import { useRoute } from "vue-router"
 const loading = ref(true)
 const currentPlaylist = ref<UserPlaylist>()
 const tracks = computed(() => currentPlaylist.value?.tracks || [])
+const toast = useToast()
 
 onMounted(async () => {
   try {
     currentPlaylist.value = await fetchUserPlaylist(Number(useRoute().params.id))
     loading.value = false
   } catch (e) {
-    useToast().add({
+    toast.add({
       color: "error",
-      title: i18n.global.t("cloudie.common.loadFail"),
+      title: i18n.global.t("skye.common.loadFail"),
       description: e instanceof Error ? e.message : String(e),
     })
   }

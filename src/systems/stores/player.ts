@@ -8,13 +8,13 @@ import {
   playIndex as thePlayIndex,
 } from "../player/listening-list"
 import type { Track } from "@/utils/types"
-import Hls, { ErrorData } from "hls.js"
+import Hls, { type ErrorData } from "hls.js"
 import { i18n } from "../i18n"
 import { getCurrentWindow } from "@tauri-apps/api/window"
 import { getArtist, getCoverUrl, replaceImageUrl } from "@/utils/utils"
 import { M3U8_CACHE_MANAGER } from "../player/cache"
 import { CachedLoader } from "../player/loader"
-import { Ref } from "vue"
+import type { Ref } from "vue"
 import { config } from "../config"
 import { addToHistory } from "@/utils/api"
 
@@ -29,23 +29,27 @@ export enum PlayOrder {
 // FIXME: sometime play state is messed up after reload
 
 class PlayerState {
-  currentTime: number = 0
-  duration: number = Infinity
+  currentTime: number = 0 // in seconds
+  duration: number = Infinity // in seconds
   loading: boolean = false
   isPaused: boolean = true
-  pendingDuration: number | undefined
+  pendingDuration: number | undefined // in seconds
+  isFullscreen: boolean = false
 
+  volume: number = 0.5
   listenIndex: number = -1
   playOrder: PlayOrder = PlayOrder.Ordered
 }
 // Player stuff
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)()
+let sourceNode: AudioNode | null = null
 let mediaRef: Ref<HTMLVideoElement | null> | undefined
 let hlsPlayer: Hls | undefined
 
 // FIXME: Clicking too fast cause audio stream mismatch
 export const usePlayerStore = defineStore("player", {
   persist: {
-    omit: ["loading", "isPaused", "pendingDuration"],
+    omit: ["loading", "isPaused", "pendingDuration", "isFullscreen"],
   },
   state: (): PlayerState => {
     return {
@@ -55,6 +59,8 @@ export const usePlayerStore = defineStore("player", {
   getters: {
     track: (): Track | undefined => getCurrentTrack(),
     mediaRef: (): Ref<HTMLVideoElement | null> | undefined => mediaRef,
+    audioCtx: (): AudioContext => audioCtx,
+    sourceNode: (): AudioNode | null => sourceNode,
     playProgress: (state): number => {
       if (!isFinite(state.duration)) {
         return 0
@@ -63,6 +69,12 @@ export const usePlayerStore = defineStore("player", {
     },
   },
   actions: {
+    setVolume(volume: number) {
+      this.volume = volume
+      if (mediaRef?.value) {
+        mediaRef.value.volume = volume
+      }
+    },
     isPlayingTrack(track: Track): boolean {
       return this.track !== undefined && this.track.id === track.id
     },
@@ -82,10 +94,12 @@ export const usePlayerStore = defineStore("player", {
         })
       }
 
-      getCurrentWindow().setTitle(`${track.title} - ${getArtist(track)} - Cloudie`)
+      getCurrentWindow().setTitle(`${track.title} - ${getArtist(track)} - Skye`)
     },
 
     async nextTrack(offset: number = 1) {
+      this.pendingDuration = 0
+
       this.pause()
       const trackIndex = await getNextTrackIndex(offset)
 
@@ -157,12 +171,12 @@ export const usePlayerStore = defineStore("player", {
         this.loading = false
         useToast().add({
           color: "error",
-          title: i18n.global.t("cloudie.toasts.loadFailed"),
+          title: i18n.global.t("skye.toasts.loadFailed"),
           description: error instanceof Error ? error.message : String(error),
         })
 
         // automatically loads after a few seconds
-        setTimeout(async () => {
+        window.setTimeout(async () => {
           // TODO: abortable task
           await this.nextTrack()
         }, 5000)
@@ -175,6 +189,7 @@ export const usePlayerStore = defineStore("player", {
 
       const safeTime = Math.max(0, Math.min(time, this.duration))
       mediaRef.value.currentTime = safeTime
+      this.currentTime = safeTime // make sure time is synced instantly
     },
     async resume() {
       if (!mediaRef || !mediaRef.value || !this.track) {
@@ -208,6 +223,14 @@ export const usePlayerStore = defineStore("player", {
       }
 
       mediaRef = mref // directly pass reactivity
+
+      // create effect chain
+      sourceNode = audioCtx.createMediaElementSource(mediaRef.value!)
+      sourceNode.connect(audioCtx.destination)
+
+      // remember volume
+      this.setVolume(this.volume)
+
       // init MediaSession Handlers
       // NOTE: Updating Media here will cause OS not to display before clicking play
       if ("mediaSession" in navigator) {

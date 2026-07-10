@@ -1,5 +1,5 @@
 {
-  "cloudie": {
+  "skye": {
     "langName": "English",
     "main": {
       "searchBar": "Search",
@@ -10,6 +10,7 @@
       "downloads": "Downloads",
       "settings": "Settings",
       "feeds": "Feeds",
+      "recommendations": "Recommendations",
       "following": "Following",
       "track": "Track",
       "search": "Search",

@@ -25,8 +25,10 @@ dist-ssr
 # Auto-generated type declarations
 auto-imports.d.ts
 components.d.ts
+typed-router.d.ts
 
 # User-specific files
+scripts/*.js
 
 # some stuff about reverse engineering
 internals 

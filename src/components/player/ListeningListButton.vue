@@ -1,37 +1,48 @@
 <template>
   <UDrawer v-model:open="open" :overlay="false" direction="right" handle-only>
-    <UButton size="xl" class="rounded-full cursor-pointer" icon="i-mingcute-playlist-line" variant="soft" />
+    <UButton
+      size="xl"
+      class="rounded-full cursor-pointer"
+      icon="i-mingcute-playlist-line"
+      variant="soft" />
 
     <template #content>
       <div class="flex flex-col gap-3 w-md overflow-y-auto p-3">
-        <span class="text-xl font-bold">{{ $t("cloudie.player.listening") }}</span>
+        <span class="text-xl font-bold">{{ $t("skye.player.listening") }}</span>
 
         <div class="flex items-center gap-2">
-          <UCheckbox @change="selectAll"
+          <UCheckbox
+            @change="selectAll"
             :checked="selectedIdxs.length === listeningList.length && listeningList.length > 0" />
           <UButton label="removeSelected" @click="removeSelected">
-            {{ $t("cloudie.player.removeSelected") }}
+            {{ $t("skye.player.removeSelected") }}
           </UButton>
-          <span>{{ $t("cloudie.trackList.selected", { count: selectedIdxs.length }) }}</span>
+          <span>{{ $t("skye.trackList.selected", { count: selectedIdxs.length }) }}</span>
 
           <div class="flex-1"></div>
 
           <UButton icon="i-mingcute-close-line" size="xl" variant="ghost" @click="open = false" />
         </div>
 
-
-
         <!-- Specify W so that the virtual list can display correctly -->
-        <VirtualList ref="virtualListRef" :items="listeningList" :estimateSize="() => 80" class="w-full flex-1">
+        <VirtualList
+          ref="virtualListRef"
+          :items="listeningList"
+          :estimateSize="() => 80"
+          class="w-full flex-1">
           <template #item="{ item, index }">
             <div class="flex items-center gap-2 pr-1">
-              <UCheckbox class="checkbox" :model-value="selectedIdxs.includes(index)" @update:model-value="(val) => {
+              <UCheckbox
+                class="checkbox"
+                :model-value="selectedIdxs.includes(index)"
+                @update:model-value="(val) => {
                 if (val) {
                   selectedIdxs.push(index)
                 } else {
                   selectedIdxs = selectedIdxs.filter((i) => i !== index)
                 }
-              }" :value="index" />
+              }"
+                :value="index" />
               <MiniTrack :track="item" :listening-index="index" />
             </div>
           </template>
@@ -39,12 +50,8 @@
 
         <!-- 空状态 -->
         <div v-if="listeningList.length === 0" class="py-8 text-center">
-          <div class="mb-2 text-lg">
-            {{ $t("cloudie.common.empty") }}
-          </div>
-          <div class="text-base-content/70 text-sm">
-            {{ $t("cloudie.common.emptyDesc") }}
-          </div>
+          <div class="mb-2 text-lg">{{ $t("skye.common.empty") }}</div>
+          <div class="text-base-content/70 text-sm">{{ $t("skye.common.emptyDesc") }}</div>
         </div>
       </div>
     </template>

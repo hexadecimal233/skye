@@ -1,12 +1,15 @@
 <template>
   <div v-if="user">
     <div>
-      <div class="alert alert-warning">TODO: This is still a demo, translations and content experience might be bad
+      <div class="alert alert-warning">
+        TODO: This is still a demo, translations and content experience might be bad
       </div>
       <div class="flex items-center mb-6">
         <div class="avatar mr-4">
           <div class="w-20 h-20 rounded-full">
-            <img :src="user.avatar_url || 'https://picsum.photos/seed/default-avatar/200/200.jpg'" :alt="user.username"
+            <img
+              :src="user.avatar_url || 'https://picsum.photos/seed/default-avatar/200/200.jpg'"
+              :alt="user.username"
               class="w-full h-full object-cover" />
           </div>
         </div>
@@ -17,11 +20,20 @@
           </h2>
           <p class="text-gray-500">{{ user.full_name || user.username }}</p>
           <div class="flex space-x-4 mt-1 text-sm text-gray-400">
-            <span>{{ user.followers_count }} {{ $t("cloudie.user.followers") }}</span>
+            <span
+              >{{ user.followers_count }}
+              {{ $t("skye.user.followers") }}</span
+            >
             <span>•</span>
-            <span>{{ user.followings_count }} {{ $t("cloudie.user.following") }}</span>
+            <span
+              >{{ user.followings_count }}
+              {{ $t("skye.user.following") }}</span
+            >
             <span>•</span>
-            <span>{{ user.track_count }} {{ $t("cloudie.user.tracks") }}</span>
+            <span
+              >{{ user.track_count }}
+              {{ $t("skye.user.tracks") }}</span
+            >
           </div>
         </div>
       </div>
@@ -31,9 +43,13 @@
       </div>
 
       <div class="tabs tabs-boxed mb-6">
-        <a v-for="(tab, index) in tabs" :key="tab.id" class="tab" :class="{ 'tab-active': activeTab === index }"
+        <a
+          v-for="(tab, index) in tabs"
+          :key="tab.id"
+          class="tab"
+          :class="{ 'tab-active': activeTab === index }"
           @click="activeTab = index">
-          {{ $t(`cloudie.user.tabs.${tab.id}`) }}
+          {{ $t(`skye.user.tabs.${tab.id}`) }}
         </a>
       </div>
 
@@ -42,13 +58,13 @@
         <div v-if="activeTab === 0">
           <div v-if="tracksLoading" class="flex justify-center items-center py-8">
             <div class="loading loading-spinner loading-lg"></div>
-            <span class="ml-2">{{ $t("cloudie.common.loading") }}</span>
+            <span class="ml-2">{{ $t("skye.common.loading") }}</span>
           </div>
           <div v-else-if="tracksError" class="alert alert-error">
-            <span>{{ $t("cloudie.user.tracksError") }}: {{ tracksError }}</span>
+            <span>{{ $t("skye.user.tracksError") }}: {{ tracksError }}</span>
           </div>
           <div v-else-if="tracks.length === 0" class="text-center py-8">
-            <p>{{ $t("cloudie.user.noTracks") }}</p>
+            <p>{{ $t("skye.user.noTracks") }}</p>
           </div>
           <div v-else class="flex-col flex space-y-2">
             <div v-for="track in tracks" :key="track.id">
@@ -61,13 +77,13 @@
         <div v-if="activeTab === 1">
           <div v-if="spotlightLoading" class="flex justify-center items-center py-8">
             <div class="loading loading-spinner loading-lg"></div>
-            <span class="ml-2">{{ $t("cloudie.common.loading") }}</span>
+            <span class="ml-2">{{ $t("skye.common.loading") }}</span>
           </div>
           <div v-else-if="spotlightError" class="alert alert-error">
-            <span>{{ $t("cloudie.user.spotlightError") }}: {{ spotlightError }}</span>
+            <span>{{ $t("skye.user.spotlightError") }}: {{ spotlightError }}</span>
           </div>
           <div v-else-if="spotlight.length === 0" class="text-center py-8">
-            <p>{{ $t("cloudie.user.noSpotlight") }}</p>
+            <p>{{ $t("skye.user.noSpotlight") }}</p>
           </div>
           <div v-else class="space-y-2">
             <MiniTrack :track="track" v-for="track in spotlight" :key="track.id" />
@@ -78,26 +94,29 @@
         <div v-if="activeTab === 2">
           <div v-if="webProfilesLoading" class="flex justify-center items-center py-8">
             <div class="loading loading-spinner loading-lg"></div>
-            <span class="ml-2">{{ $t("cloudie.common.loading") }}</span>
+            <span class="ml-2">{{ $t("skye.common.loading") }}</span>
           </div>
           <div v-else-if="webProfilesError" class="alert alert-error">
-            <span>{{ $t("cloudie.user.webProfilesError") }}: {{ webProfilesError }}</span>
+            <span>{{ $t("skye.user.webProfilesError") }}: {{ webProfilesError }}</span>
           </div>
           <div v-else-if="webProfiles.length === 0" class="text-center py-8">
-            <p>{{ $t("cloudie.user.noWebProfiles") }}</p>
+            <p>{{ $t("skye.user.noWebProfiles") }}</p>
           </div>
           <div v-else class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div v-for="profile in webProfiles" :key="profile.network"
-              class="card bg-base-100 shadow-md hover:shadow-lg transition-shadow" @click="openWebProfile(profile.url)">
+            <div
+              v-for="profile in webProfiles"
+              :key="profile.network"
+              class="card bg-base-100 shadow-md hover:shadow-lg transition-shadow"
+              @click="openWebProfile(profile.url)">
               <div class="card-body p-4">
                 <div class="flex items-center space-x-3">
-                  <div class="text-2xl">
-                    {{ getNetworkIcon(profile.network) }}
-                  </div>
+                  <div class="text-2xl">{{ getNetworkIcon(profile.network) }}</div>
                   <div>
                     <h4 class="font-medium">{{ profile.title }}</h4>
                     <p class="text-sm text-gray-500">{{ profile.network }}</p>
-                    <p v-if="profile.username" class="text-sm text-gray-400">@{{ profile.username }}</p>
+                    <p v-if="profile.username" class="text-sm text-gray-400">
+                      @{{ profile.username }}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -109,24 +128,28 @@
         <div v-if="activeTab === 3">
           <div v-if="relatedArtistsLoading" class="flex justify-center items-center py-8">
             <div class="loading loading-spinner loading-lg"></div>
-            <span class="ml-2">{{ $t("cloudie.common.loading") }}</span>
+            <span class="ml-2">{{ $t("skye.common.loading") }}</span>
           </div>
           <div v-else-if="relatedArtistsError" class="alert alert-error">
-            <span>{{ $t("cloudie.user.relatedArtistsError") }}: {{ relatedArtistsError }}</span>
+            <span>{{ $t("skye.user.relatedArtistsError") }}: {{ relatedArtistsError }}</span>
           </div>
           <div v-else-if="relatedArtists.length === 0" class="text-center py-8">
-            <p>{{ $t("cloudie.user.noRelatedArtists") }}</p>
+            <p>{{ $t("skye.user.noRelatedArtists") }}</p>
           </div>
           <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            <div v-for="artist in relatedArtists" :key="artist.id"
+            <div
+              v-for="artist in relatedArtists"
+              :key="artist.id"
               class="card bg-base-100 shadow-md hover:shadow-lg transition-shadow cursor-pointer"
               @click="openUserProfile(artist.permalink)">
               <div class="card-body p-4">
                 <div class="flex items-center space-x-3">
                   <div class="avatar">
                     <div class="w-12 h-12 rounded-full">
-                      <img :src="artist.avatar_url || 'https://picsum.photos/seed/user-' + artist.id + '/200/200.jpg'"
-                        :alt="artist.username" class="w-full h-full object-cover" />
+                      <img
+                        :src="artist.avatar_url || 'https://picsum.photos/seed/user-' + artist.id + '/200/200.jpg'"
+                        :alt="artist.username"
+                        class="w-full h-full object-cover" />
                     </div>
                   </div>
                   <div class="flex-1 min-w-0">
@@ -134,12 +157,19 @@
                       {{ artist.username }}
                       <span v-if="artist.verified" class="badge badge-info badge-sm ml-2">✓</span>
                     </h4>
-                    <p class="text-sm text-gray-500 truncate">{{ artist.full_name || artist.username }}
+                    <p class="text-sm text-gray-500 truncate">
+                      {{ artist.full_name || artist.username }}
                     </p>
                     <div class="flex space-x-2 mt-1 text-xs text-gray-400">
-                      <span>{{ artist.followers_count }} {{ $t("cloudie.user.followers") }}</span>
+                      <span
+                        >{{ artist.followers_count }}
+                        {{ $t("skye.user.followers") }}</span
+                      >
                       <span>•</span>
-                      <span>{{ artist.track_count }} {{ $t("cloudie.user.tracks") }}</span>
+                      <span
+                        >{{ artist.track_count }}
+                        {{ $t("skye.user.tracks") }}</span
+                      >
                     </div>
                   </div>
                 </div>
@@ -152,13 +182,13 @@
         <div v-if="activeTab === 4">
           <div v-if="commentsLoading" class="flex justify-center items-center py-8">
             <div class="loading loading-spinner loading-lg"></div>
-            <span class="ml-2">{{ $t("cloudie.common.loading") }}</span>
+            <span class="ml-2">{{ $t("skye.common.loading") }}</span>
           </div>
           <div v-else-if="commentsError" class="alert alert-error">
-            <span>{{ $t("cloudie.user.commentsError") }}: {{ commentsError }}</span>
+            <span>{{ $t("skye.user.commentsError") }}: {{ commentsError }}</span>
           </div>
           <div v-else-if="comments.length === 0" class="text-center py-8">
-            <p>{{ $t("cloudie.user.noComments") }}</p>
+            <p>{{ $t("skye.user.noComments") }}</p>
           </div>
           <div v-else class="space-y-4">
             <div v-for="comment in comments" :key="comment.id" class="card bg-base-100 shadow-sm">
@@ -168,18 +198,24 @@
                     <div class="w-10 h-10 rounded-full">
                       <img
                         :src="comment.user.avatar_url || 'https://picsum.photos/seed/user-' + comment.user.id + '/200/200.jpg'"
-                        :alt="comment.user.username" class="w-full h-full object-cover" />
+                        :alt="comment.user.username"
+                        class="w-full h-full object-cover" />
                     </div>
                   </div>
                   <div class="flex-1">
                     <div class="flex items-center space-x-2 mb-1">
                       <h4 class="font-medium">{{ comment.user.username }}</h4>
-                      <span class="text-xs text-gray-400">{{ formatDate(comment.created_at) }}</span>
+                      <span class="text-xs text-gray-400"
+                        >{{ formatDate(comment.created_at) }}</span
+                      >
                     </div>
                     <p class="text-sm">{{ comment.body }}</p>
                     <div class="mt-2">
-                      <p class="text-xs text-gray-500">{{ $t("cloudie.user.onTrack") }}: {{
-                        comment.track.title }}</p>
+                      <p class="text-xs text-gray-500">
+                        {{ $t("skye.user.onTrack") }}:
+                        {{
+                        comment.track.title }}
+                      </p>
                     </div>
                   </div>
                 </div>
